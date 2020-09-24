@@ -39,10 +39,8 @@ class Transport:
         :param headers: a dictionary with the HTTP headers.
 
         """
-        response = self.session.get(
-            address, params=params, headers=headers, timeout=self.operation_timeout
-        )
-        return response
+        print(f"GET {address}, params: {params}, headers: {headers}")
+        raise NotImplementedError("Not making request")
 
     def post(self, address, message, headers):
         """Proxy to requests.posts()
@@ -58,30 +56,8 @@ class Transport:
                 log_message = log_message.decode("utf-8")
             self.logger.debug("HTTP Post to %s:\n%s", address, log_message)
 
-        response = self.session.post(
-            address, data=message, headers=headers, timeout=self.operation_timeout
-        )
-
-        if self.logger.isEnabledFor(logging.DEBUG):
-            media_type = get_media_type(
-                response.headers.get("Content-Type", "text/xml")
-            )
-
-            if media_type == "multipart/related":
-                log_message = response.content
-            else:
-                log_message = response.content
-                if isinstance(log_message, bytes):
-                    log_message = log_message.decode(response.encoding or "utf-8")
-
-            self.logger.debug(
-                "HTTP Response from %s (status: %d):\n%s",
-                address,
-                response.status_code,
-                log_message,
-            )
-
-        return response
+        print(f"POST {address}, data: {message}, headers: {headers}")
+        raise NotImplementedError("Not making real request")
 
     def post_xml(self, address, envelope, headers):
         """Post the envelope xml element to the given address with the headers.
